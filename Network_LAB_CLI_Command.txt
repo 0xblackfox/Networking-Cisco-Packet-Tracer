@@ -1,0 +1,138 @@
+Networking-Lab CLI Command:
+          ------------------------------
+Lab-1 -> Configuration and Implementation of Multiple LAN Network using Switch and Hub.
+
+
+Lab-2,3 -> Configuration and Implementation Two and Three Router of CLI Mode:
+
+1. Enable Router Config : (setup in Router)
+       => en
+2. Routing Terminal Configure: 
+       => config T
+3. Select Interface:
+     => int fa 0/0
+4. Ip Address and Subnet mask set in Router: (setup in Router)
+     => ip add 192.168.1.1 255.255.255.0
+5. Port Status On:
+     => no shut
+6. Close Connection:
+    => exit
+7. IP routing Configuration using next-hop(via connection) : (setup in Router)
+        => ip route  network-id(via connect)  subnet-mask  next-hop(Via connection)
+    => ip route 192.168.1.0 255.255.255.0 192.168.1.2
+
+
+Lab-4 -> Configuration and Implementation Two & Three VLAN Switch of CLI Mode:
+1. Enable Router Config :
+       => en
+2. vlan database: (setup in switch)
+    => vlan 10 name A
+3. Vlan steup: (setup in switch)
+    => int fa0/1
+        => switchport mode access
+        => switchport access vlan 10
+
+
+
+
+Lab-5 -> Configuration and Implementation  OSPF of Multiple Router(two & Three) using CLI Mode:
+1. Enable Router Config : (setup in Router)
+       => en
+2. Routing Terminal Configure: 
+       => config T
+3. Select Interface:
+     => int fa 0/0
+4. Ip Address and Subnet mask set in Router: (setup in Router)
+     => ip add 192.168.1.1 255.255.255.0
+5. Port Status On:
+     => no shut
+6. Close Connection:
+    => exit
+7. OSPF Configuration : (setup in Router)
+    => router ospf 1
+    => network  network-id wildcard-mask area name
+    => network  192.168.1.0 0.0.0.255 area 0
+
+    => router ospf 2
+    => network  192.168.2.0 0.0.0.255 area 0
+
+    => router ospf 3
+    => network  192.168.3.0 0.0.0.255 area 1
+
+
+Lab-6-> Configuration and Implementation  DHCP with Vlan Switch(Two & Three) of CLI Mode:
+STep-1: (Switch Setup)
+    -> en
+    -> config T
+    -> vlan 10
+    -> exit
+
+    -> int range fa 0/1-3    [do all interface in one command]
+    -> switchport mode access
+    -> switchport access vlan 10
+    -> exit
+
+
+Step -2: (If Multiple Switch Connect in one switch otherWise not needed)
+    -> en
+    -> config T
+    -> vlan 10
+    -> exit
+    -> vlan 20
+    -> exit
+
+    -> int range fa 0/1    
+    -> switchport mode access
+    -> switchport access vlan 10
+    -> exit
+
+    -> int range fa 0/2    
+    -> switchport mode access
+    -> switchport access vlan 20
+    -> exit
+
+    -> int fa 0/3
+    -> switchport mode trunk         
+                    # [Trunk - Transfer All the Vlan Traffic into the one Interface]
+
+    -> end
+
+
+Step-3 : (Router Configuration)
+    -> en
+    -> config T
+
+    -> int range fa 0/0
+    -> no shut
+    -> exit
+
+    ## Create virtual Sub-Inteface:    
+        #(Sub-interface: It's divide one Interface to multiple sub interface to connect different network)   
+    -> int fa 0/0.1 
+    -> encapsulation dot1Q 10
+    -> ip add 192.168.1.1 255.255.255.0
+    -> exit
+
+    # (Doing same on the Vlan 20 or others Vlan)
+
+
+STep-4: (Same Router in DHCP Setup)
+    -> ip dhcp pool A
+            # [ Pool - Which network going to connect with]
+    -> network 192.168.1.0 255.255.255.0
+    -> default-router 192.168.1.1
+    -> exit
+    -> ip dhcp excluded-address 192.168.1.1 192.168.1.10  
+                           # [ Here this ip not add the user and user device DHCP start with 192.168.1.11]
+
+
+    -> ip dhcp pool B
+    -> network 192.168.2.0 255.255.255.0
+    -> default-router 192.168.2.1
+    -> exit
+    -> ip dhcp excluded-address 192.168.2.1  
+
+
+
+Clock Rate set on Serial Interface: (If it appears next to the Serial Interface)
+    -> clock rate 64000
